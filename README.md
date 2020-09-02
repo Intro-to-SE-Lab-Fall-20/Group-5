@@ -5,7 +5,7 @@
 The product is an email web-application.  
 
 ## Objective
-TBD
+To write a program for a email client which will allow the user to send and recieve, among other tasks, to other users regardless of what email client they are using.
 
 ## Features
 * Login 

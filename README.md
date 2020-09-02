@@ -23,5 +23,5 @@ TBD
 |------|-------|
 |Haley | haleyhagler227 |
 |Jeffrey| |
-|Nick | |
+|Nick | Fullmetal Potato|
 |William |wpb103 |

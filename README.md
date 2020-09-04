@@ -22,6 +22,6 @@ TBD
 ||GitHib username|
 |------|-------|
 |Haley | haleyhagler227 |
-|Jeffrey| |
+|Jeffrey| jlc1541 |
 |Nick | FullmetalPotato|
 |William |wpb103 |

@@ -1,0 +1,68 @@
+{% block content %}
+
+    <h1>Hi, {{ user.username }}!</h1>
+
+    
+    <button type="button" id="back_button" onclick="display_email_list()" style="display:none;">Back</button>
+
+
+    <table id="inbox_outbox">
+
+    {% for email in emails %}
+
+    <tr onclick="expand_email( {{ email.id }} )">
+    	<td>{{ email.sender }}</td>
+    	<td>{{ email.subject }}</td> 
+    	
+  	</tr>
+
+    {% endfor %}
+
+    </table>
+
+    <div id="email_display" style="display: none;">
+
+    	<p id="from">From :</p>
+    	<p id="subject"> Subject: </p>
+    	<p id="body"></p>
+
+    </div>
+
+
+
+    <script>
+		function expand_email(index) {
+			//<!-- Hides table -->
+	  		document.getElementById("inbox_outbox").style.display= "none";
+			
+			//<!-- expands email -->
+
+			var emails = {{ emails|tojson }}
+
+			for (i = 0; i < emails.length; i++) { 
+  				if (index == emails[i].id){
+  					document.getElementById("from").innerHTML  = "From: " + emails[i].sender;
+  					document.getElementById("subject").innerHTML  = "Subject: " + emails[i].subject;
+  					document.getElementById("body").innerHTML  = emails[i].body;
+  				}
+			}
+
+			document.getElementById("email_display").style.display = "block";
+			document.getElementById("back_button").style.display = "block";
+		}
+
+		function display_email_list(){
+			document.getElementById("email_display").style.display = "none";
+			document.getElementById("back_button").style.display = "none";
+
+			document.getElementById("inbox_outbox").style.display= "block";
+
+
+		}
+		
+
+
+
+	</script>
+
+{% endblock %}

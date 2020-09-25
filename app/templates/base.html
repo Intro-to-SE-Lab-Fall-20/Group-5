@@ -1,17 +1,28 @@
-
 <html>
     <head>
-      {% if title %}
-      <title>{{ title }} - Potato Mail</title>
-      {% else %}
-      <title>Potato Mail</title>
-      {% endif %}
+        {% if title %}
+        <title>{{ title}} - PotatoMail</title>
+        {% else %}
+        <title> PotatoMail</title>
+        {% endif %}
     </head>
     <body>
-        <div>Potato Mail: <a href="/index">Home</a></div>
+        <div>
+            PotatoMail:
+                <a href="{{url_for('test') }}">Home</a>
+                <a href="{{url_for('login') }}">Login</a>
+                <a href="{{url_for('index') }}">Inbox</a>
+        </div>
         <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li}
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
         {% block content %}{% endblock %}
     </body>
 </html>
-
-

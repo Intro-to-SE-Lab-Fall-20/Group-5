@@ -4,19 +4,18 @@ from email.header import decode_header
 import webbrowser
 import os
 
-def receive_emails(server, username, password):
+def receive_emails(server, inbox, N, username, password):
     # account credentials
-    username = "potatomail.test@gmail.com"
-    password = "potato55"
+
 
     # create an IMAP4 class with SSL
-    imap = imaplib.IMAP4_SSL("imap.gmail.com")
+    imap = imaplib.IMAP4_SSL(server)
     # authenticate
     imap.login(username, password)
 
-    status, messages = imap.select("INBOX")
+    status, messages = imap.select(inbox)
     # number of top emails to fetch
-    N = 3
+
     # total number of emails
     messages = int(messages[0])
 
@@ -85,11 +84,12 @@ def receive_emails(server, username, password):
                     print("=" * 100)
 
                 emails.append({
-                    "sender": username,
-                    "receiver": from_,
+                    "sender": from_,
+                    "receiver": username,
                     "subject": subject,
                     "body": body,
                     "id": i
                 })
     imap.close()
     imap.logout()
+    return emails

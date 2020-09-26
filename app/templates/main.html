@@ -1,39 +1,62 @@
-{% block content %}
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
+{% block app_content %}
 	<h1>Hi, {{ user.username }}!</h1>
 
-	<button type="button" id="compose_button" onclick="compose()" style="display:block;">compose</button>
 
-	<button type="button" id="back_button" onclick="display_email_list()" style="display:none;">Back</button>
+	<a type="button" id="compose_button" onclick="compose()" style="display:inline;"  class="btn btn-dark btn-lg">
+        <span class="glyphicon glyphicon-envelope"></span>
+    </a>
 
+    
 
-	<table id="inbox_outbox">
+	<a type="button" id="back_button" onclick="display_email_list()" style="display:none;" class="btn btn-dark btn-lg">
+		<span class="glyphicon glyphicon-arrow-left"></span>
+	</a>
+
+	<br><br>
+
+	<div class="table-responsive" style="width: 90%;">
+	<table id="inbox_outbox"  class="table table-striped table-hover">
 
 	{% for email in emails %}
 
 	<tr onclick="expand_email( {{ email.id }} )">
-		<td>{{ email.sender }}</td>
-		<td>{{ email.subject }}</td> 
+		<td style="width: 10%;">{{ email.sender }}</td>
+		<td style="width: 80%;">{{ email.subject }}</td> 
 		
 	</tr>
 
 	{% endfor %}
 
 	</table>
-
-	<div id="email_display" style="display: none;">
-
-		<p id="from">From :</p>
-		<p id="subject"> Subject: </p>
-		<p id="body"></p>
-
 	</div>
 
-	<div id="compose_form" style="display:none;">
+	<div class="table-responsive" style="width: 90%;">
+	<table id="email_display" style="display: none;" class="table ">
+
+		<tr>
+			<td style="width: 10%"> From: </td>
+			<td id="from"style="width: 80%"> </td>
+		</tr>
+		<tr>
+			<td> Subject: </td>
+			<td id="subject"> </td>
+		</tr>
+		<tr>
+			<td> </td>
+			<td id="body"></td>
+		</tr>
+
+	</table>
+	</div>
+
+	<div id="compose_form" style="display:none;" class="form form-horizontal">
 
 		<form action="" method="post" novalidate>
     		{{ form.hidden_tag() }}
-    		<p>
+    		<p >
         	{{ form.reciever.label }}<br>
         	{{ form.reciever(size=32) }}
     		</p>
@@ -42,9 +65,10 @@
         	{{ form.subject(size=100) }}
     		</p>
 
-    		<p>
+    		<p><pre>
        		{{ form.message.label }}<br>
         	{{ form.message() }}
+        	</pre>
     		</p>
     		<p>{{ form.submit() }}</p>
 		</form>
@@ -57,6 +81,7 @@
 	function expand_email(index) {
 		//<!-- Hides table -->
 			document.getElementById("inbox_outbox").style.display= "none";
+			document.getElementById("compose_form").style.display= "none";
 		
 		//<!-- expands email -->
 
@@ -64,14 +89,15 @@
 
 		for (i = 0; i < emails.length; i++) { 
 				if (index == emails[i].id){
-					document.getElementById("from").innerHTML  = "From: " + emails[i].sender;
-					document.getElementById("subject").innerHTML  = "Subject: " + emails[i].subject;
+					document.getElementById("from").innerHTML  = emails[i].sender;
+					document.getElementById("subject").innerHTML  = emails[i].subject;
 					document.getElementById("body").innerHTML  = emails[i].body;
 				}
 		}
 
 		document.getElementById("email_display").style.display = "block";
-		document.getElementById("back_button").style.display = "block";
+		document.getElementById("back_button").style.display = "inline";
+
 	}
 
 	function display_email_list(){
@@ -79,15 +105,16 @@
 		document.getElementById("back_button").style.display = "none";
 
 		document.getElementById("inbox_outbox").style.display= "block";
+		document.getElementById("compose_form").style.display= "none";
 
 	}
 
 	function compose(){
 		document.getElementById("email_display").style.display = "none";
-		document.getElementById("back_button").style.display = "none";
+		document.getElementById("back_button").style.display = "inline";
 
 		document.getElementById("inbox_outbox").style.display= "none";
-		document.getElementById("compose_button").style.display= "block";
+		document.getElementById("compose_button").style.display= "inline";
 
 		document.getElementById("compose_form").style.display= "block";
 

@@ -1,28 +1,47 @@
-<html>
-    <head>
-        {% if title %}
-        <title>{{ title}} - PotatoMail</title>
-        {% else %}
-        <title> PotatoMail</title>
-        {% endif %}
-    </head>
-    <body>
-        <div>
-            PotatoMail:
-                <a href="{{url_for('test') }}">Home</a>
-                <a href="{{url_for('login') }}">Login</a>
-                <a href="{{url_for('index') }}">Inbox</a>
+
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+	{% if title %}
+		{{ title }} - Potato Mail
+	{% else %}
+		Potato Mail
+	{% endif %}
+{% endblock %}
+
+
+{% block navbar %}
+
+
+    <nav class="navbar navbar-default">
+    	<div class="container-fluid">
+            <div class="navbar-header">
+            	<a class="navbar-brand" >Potato Mail </a>
+            </div>
+            <div class="nav navbar-nav">
+            	<li><a>Account</a></li>
+        		<li><a>Inbox</a></li>
+        		<li><a>Outbox</a></li>
+        		
+        	</div>
         </div>
-        <hr>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
-        <ul>
             {% for message in messages %}
-            <li>{{ message }}</li}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
             {% endfor %}
-        </ul>
         {% endif %}
         {% endwith %}
-        {% block content %}{% endblock %}
-    </body>
-</html>
+
+        {# application content needs to be provided in the app_content block #}
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}
+
+
+

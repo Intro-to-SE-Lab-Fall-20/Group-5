@@ -4,6 +4,7 @@ from app.forms import LoginForm, ComposeEmail
 
 from app.models import Email
 from app.smtp import sendemail
+from app.email_reader import receive_emails
 
 import app.login_credentials as lc
 
@@ -12,25 +13,13 @@ import app.login_credentials as lc
 def index():
 
 	# Dummy info while users aren't set up
-	user = {'username': 'Miguel'}
+	user = {'username': lc.user_name}
 
 	# Dummy emails while email retrival isn't working
-	emails = [
-		{
-			'sender': 'haley@gmail.com',
-			'reciever': 'test@email.com',
-			'subject': 'Beautiful day in Portland!',
-			'body': 'lalalallal!!',
-			'id': 1
-		},
-		{
-			'sender': 'Joe@yahoo.com',
-			'reciever': 'test@email.com',
-			'subject': 'Helloo!!',
-			'body': 'lalalallal!!',
-			'id': 2
-		}
-	]
+
+
+	#receive_emails(server, inbox, N, username, password):
+	emails = receive_emails("imap.gmail.com", "INBOX", 5, lc.user_name, lc.password)
 
 	form = ComposeEmail()
 

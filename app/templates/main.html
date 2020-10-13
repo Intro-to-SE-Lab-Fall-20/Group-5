@@ -1,6 +1,24 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
+{% block email_folders %}
+
+<form action="" method="post">
+
+{% for folder in folders %}
+
+	<a class="dropdown-item" href="{{url_for('inbox')}}/{{folder}}">{{folder}}</a><br>
+
+
+{% endfor %}
+
+</form>
+
+{% endblock %}
+
+
+
+
 {% block app_content %}
 	<h1>Hi, {{ user.username }}!</h1>
 
@@ -37,8 +55,12 @@
 	<table id="email_display" style="display: none;" class="table ">
 
 		<tr>
+			<td style="width: 10%"> To: </td>
+			<td id="to__" style="width: 80%"> </td>
+		</tr>
+		<tr>
 			<td style="width: 10%"> From: </td>
-			<td id="from"style="width: 80%"> </td>
+			<td id="from__" style="width: 80%"> </td>
 		</tr>
 		<tr>
 			<td> Subject: </td>
@@ -52,25 +74,29 @@
 	</table>
 	</div>
 
-	<div id="compose_form" style="display:none;" class="form form-horizontal">
+	<div id="compose_form" style="display:none;" class="form-group float-label-control">
 
 		<form action="" method="post" novalidate>
     		{{ form.hidden_tag() }}
-    		<p >
-        	{{ form.reciever.label }}<br>
-        	{{ form.reciever(size=32) }}
-    		</p>
-    		<p>
-       		{{ form.subject.label }}<br>
-        	{{ form.subject(size=100) }}
-    		</p>
+    		
+        	<div class="form-group float-label-contro">
 
-    		<p><pre>
-       		{{ form.message.label }}<br>
-        	{{ form.message() }}
-        	</pre>
+        	{{ wtf.form_field(form.reciever, class='form-control', 
+        	placeholder='receiver email') }}
+    		
+    		{{ wtf.form_field(form.subject, class='form-control', 
+        	placeholder='subject') }}
+
+    		<p>
+
+    		{{ wtf.form_field(form.message, class='form-control', 
+        	placeholder='message') }}
+       		
+        	
     		</p>
     		<p>{{ form.submit() }}</p>
+
+    	</div>	
 		</form>
 
 	</div>
@@ -87,17 +113,27 @@
 
 		var emails = {{ emails|tojson }}
 
+		console.log(emails)
+
 		for (i = 0; i < emails.length; i++) { 
 				if (index == emails[i].id){
-					document.getElementById("from").innerHTML  = emails[i].sender;
+					console.log(emails[i].receiver)
+					
+					document.getElementById("to__").innerHTML  = sanatize_emails(emails[i].receiver);
+					document.getElementById("from__").innerHTML  = sanatize_emails(emails[i].sender);
 					document.getElementById("subject").innerHTML  = emails[i].subject;
-					document.getElementById("body").innerHTML  = emails[i].body;
+					document.getElementById("body").innerHTML  = "<pre>" + emails[i].body + "</pre>";
 				}
 		}
 
 		document.getElementById("email_display").style.display = "block";
 		document.getElementById("back_button").style.display = "inline";
 
+	}
+
+	function sanatize_emails(s){
+		s = s.replace("<", "");
+		return s.replace(">", "");
 	}
 
 	function display_email_list(){

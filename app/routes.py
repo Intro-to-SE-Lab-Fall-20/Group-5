@@ -4,22 +4,27 @@ from app.forms import LoginForm, ComposeEmail
 
 from app.models import Email
 from app.smtp import sendemail
-from app.email_reader import receive_emails
+from app.email_reader import receive_emails, folder_list
 
 import app.login_credentials as lc
 
-@app.route('/email/', methods=['GET', 'POST'])
+from urllib.parse import unquote_plus
+
+@app.route('/inbox/', methods=['GET', 'POST'])
+@app.route('/inbox/<path:folder>', methods=['GET', 'POST'])
+
 #@login_required   #Commented out till login is implemented
-def index():
+def inbox(folder = "INBOX"):
 
 	# Dummy info while users aren't set up
 	user = {'username': lc.user_name}
 
-	# Dummy emails while email retrival isn't working
 
+	folders = folder_list("imap.gmail.com", lc.user_name, lc.password)
 
-	#receive_emails(server, inbox, N, username, password):
-	emails = receive_emails("imap.gmail.com", "INBOX", 5, lc.user_name, lc.password)
+	emails = receive_emails("imap.gmail.com", '"'+unquote_plus(folder)+'"', 5, lc.user_name, lc.password)
+	
+	
 
 	form = ComposeEmail()
 
@@ -36,19 +41,13 @@ def index():
 		sendemail("smtp.gmail.com", 465, email)
 		
 		flash('')
-		return redirect(url_for('index'))
+		return redirect(url_for('inbox'))
 	
 
-	return render_template('main.html', user=user, emails = emails, form=form)
+	return render_template('main.html', folders = folders, user=user, emails = emails, form=form)
 
-@app.route('/homepage/')
-def logout():
-	return render_template('logout_page.html')
 
-@app.route('/test')
-def test():
-    user = {'username' : 'User'}
-    return render_template('test.html', title = 'Home', user = user)
+
 
 @app.route('/', methods=['GET','POST'])
 def login():
@@ -58,3 +57,13 @@ def login():
             form.username.data, form.remember_me.data))
         return redirect(url_for('test'))
     return render_template('login.html', title='Sign In', form=form)
+
+
+@app.route('/homepage/')
+def logout():
+	return render_template('logout_page.html')
+
+@app.route('/test')
+def test():
+    user = {'username' : 'User'}
+    return render_template('test.html', title = 'Home', user = user)

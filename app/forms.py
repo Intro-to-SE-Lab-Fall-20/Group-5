@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Email, Optional
+#from flask_wysiwyg.wysiwyg import WysiwygField
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

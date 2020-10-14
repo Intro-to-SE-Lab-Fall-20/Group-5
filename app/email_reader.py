@@ -4,6 +4,21 @@ from email.header import decode_header
 import webbrowser
 import os
 
+
+
+def folder_list(server, username, password):
+	imap = imaplib.IMAP4_SSL(server)
+	# authenticate
+	imap.login(username, password)
+	folders = imap.list()
+
+	f = []
+
+	for folder in folders[1]:
+		f.append(folder.decode("utf-8").split(' "/" ')[1].replace('"', ''))
+
+	return f
+
 def receive_emails(server, inbox, N, username, password):
 	# account credentials
 
@@ -12,12 +27,17 @@ def receive_emails(server, inbox, N, username, password):
 	imap = imaplib.IMAP4_SSL(server)
 	# authenticate
 	imap.login(username, password)
-
+	
 	status, messages = imap.select(inbox)
 	# number of top emails to fetch
 
+	print(messages)
+
 	# total number of emails
 	messages = int(messages[0])
+
+	if messages < N:
+		N = messages
 
 	emails = []
 
@@ -25,9 +45,11 @@ def receive_emails(server, inbox, N, username, password):
 		# fetch the email message by ID
 		res, msg = imap.fetch(str(i), "(RFC822)")
 		for response in msg:
+
 			if isinstance(response, tuple):
 				# parse a bytes email into a message object
 				msg = email.message_from_bytes(response[1])
+				
 				# decode the email subject
 				subject = decode_header(msg["Subject"])[0][0]
 				if isinstance(subject, bytes):
@@ -35,8 +57,10 @@ def receive_emails(server, inbox, N, username, password):
 					subject = subject.decode()
 				# email sender
 				from_ = msg.get("From")
+
+				to_ = msg.get("To")
 				#print("Subject:", subject)
-				#print("From:", from_)
+				
 				# if the email message is multipart
 				if msg.is_multipart():
 					# iterate over email parts
@@ -76,10 +100,10 @@ def receive_emails(server, inbox, N, username, password):
 						# open in the default browser
 						webbrowser.open(filepath)
 					#print("=" * 100)
-
+				
 				emails.append({
 					"sender": from_,
-					"receiver": username,
+					"receiver": to_,
 					"subject": subject,
 					"body": body,
 					"id": i

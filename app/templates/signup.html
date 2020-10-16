@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div>
+    <style>
+    h2{
+        font-size: 8px;
+        color: grey;
+        }
+    </style>
+    <h1> Register </h1>
+    <form action="" method="post" novalidate>
+        {{form.hidden_tag() }}
+        
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(size = 32)}}
+        </p>
+        <p>
+            {{ form.email.label }}<br>
+            {{ form.email(size = 32)}}
+        </p>
+
+        <h2> INCOMING MAIL SERVER </h2>
+        <p>
+            {{ form.IHostName.label }}
+            {{ form.IHostName(size = 32)}}
+        </p>
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(size=32) }}
+        </p>
+        <p>
+            {{ form.password.label }} <br>
+            {{ form.password(size=32) }}
+        </p>
+
+        <h2> OUTGOING MAIL SERVER </h2>
+        <p>
+            {{ form.OHostName.label }}
+            {{ form.OHostName( size = 32)}}
+        </p>
+        <p>
+            {{ form.O_username.label }}
+            {{ form.O_username(size = 32)}}
+        </p>
+        <p>
+            {{ form.O_password.label }}
+            {{ form.O_password(size = 32)}}
+        </p>
+        <p>{{ form.SignUp() }} </p>
+    </form>
+    </div>
+{% endblock %}

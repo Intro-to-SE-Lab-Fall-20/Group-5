@@ -13,12 +13,12 @@
     {% for folder in folders %}
 		{% if folder == current_folder %}
 	  	<li class="nav-item active">
-	   		<a href="{{url_for('inbox')}}/{{email_account}}/{{folder}}">{{folder}}</a>
+	   		<a href="{{url_for('inbox')}}{{email_account}}/{{folder}}">{{folder}}</a>
 	  	</li>
 	  	{% else %}	
 
 	  	<li class="nav-item">
-	   		<a href="{{url_for('inbox')}}/{{email_account}}/{{folder}}">{{folder}}</a>
+	   		<a href="{{url_for('inbox')}}{{email_account}}/{{folder}}">{{folder}}</a>
 	  	</li>
 	  	{% endif %}
 

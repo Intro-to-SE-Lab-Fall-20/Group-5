@@ -49,13 +49,13 @@ class User_Email(UserMixin, db.Model):
 	outgoing_port = db.Column(db.Integer)
 
 	def encrypt_password(self, password):
-		key = os.getenv("KEY").encode()
+		key = os.getenv("EKEY").encode()
 		
 		f = Fernet(key)
 		self.password = f.encrypt(password.encode()).decode()
 
 	def decrypt_password(self):
-		key = os.getenv("KEY").encode()
+		key = os.getenv("EKEY").encode()
 		fe = Fernet(key)
 
 		return fe.decrypt(self.password.encode()).decode()

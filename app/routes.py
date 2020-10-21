@@ -64,7 +64,7 @@ def inbox(email_account = "", folder = "" ):
 							reciever=form.reciever.data, 
 							subject=form.subject.data,
 							message=form.message.data,
-							password=account.password)
+							password=account.decrypt_password())
 
 
 			sendemail(account.outgoing_host, account.outgoing_port, email)

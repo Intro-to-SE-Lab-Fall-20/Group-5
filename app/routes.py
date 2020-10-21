@@ -6,7 +6,6 @@ from app.models import Email, User, User_Email, get_accounts_count, get_accounts
 from app.smtp import sendemail
 from app.email_reader import receive_emails, folder_list, check_connection
 
-import app.login_credentials as lc
 
 from urllib.parse import unquote_plus
 

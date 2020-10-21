@@ -1,15 +1,32 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, Email, Optional
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField
+from wtforms.validators import DataRequired, Email, Optional, EqualTo
+#from flask_wysiwyg.wysiwyg import WysiwygField
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
+	username = StringField('Username', validators=[DataRequired()])
+	password = PasswordField('Password', validators=[DataRequired()])
+	remember_me = BooleanField('Remember Me')
+	submit = SubmitField('Sign In')
+
+class RegistrationForm(FlaskForm):
+	username = StringField('Username', validators=[DataRequired()])
+	password = PasswordField('Password', validators=[DataRequired()])
+	password_2 = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+	submit = SubmitField('Register')
+
+		
+class RegisterEmailForm(FlaskForm):
+	email = StringField('Email', validators=[DataRequired(), Email()])
+	password = PasswordField('Password', validators=[DataRequired()])
+	IHostName = StringField('Incoming Mail Server Name', validators=[DataRequired()])
+	IPortNum = IntegerField('Incomeing Mail Server Port')
+	OHostName = StringField('Outgoing Mail Server Name', validators=[DataRequired()])
+	OPortNum = IntegerField('Outgoing Mail Server Port')
+	submit = SubmitField('Add')
 
 class ComposeEmail(FlaskForm):
-    reciever = StringField('Reciever', validators=[DataRequired(), Email()])
-    subject = StringField('Subject', validators=[Optional()])
-    message = TextAreaField('Message',validators=[DataRequired()])
-    submit = SubmitField('Send')
+	reciever = StringField('Reciever', validators=[DataRequired(), Email()])
+	subject = StringField('Subject', validators=[Optional()])
+	message = TextAreaField('Message',validators=[DataRequired()])
+	submit = SubmitField('Send')

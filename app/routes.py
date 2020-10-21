@@ -46,14 +46,13 @@ def inbox(email_account = "", folder = "" ):
 					folder = folder_list(account.incoming_host, account.username, account.decrypt_password())[0]
 				except:
 					print("IMAP ERROR")
-					folder = ""
+					folder = "INBOX"
 		
-		if folder:
-			f = '"'+unquote_plus(folder)+'"'
+		f = '"'+unquote_plus(folder)+'"'
 
 
-			folders = folder_list(account.incoming_host, account.username, account.decrypt_password())
-			emails = receive_emails(account.incoming_host, f, 15, account.username, account.decrypt_password())
+		folders = folder_list(account.incoming_host, account.username, account.decrypt_password())
+		emails = receive_emails(account.incoming_host, f, 15, account.username, account.decrypt_password())
 			
 		print("did it work without prefences set up")
 

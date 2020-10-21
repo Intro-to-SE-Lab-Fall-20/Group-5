@@ -1,1 +1,1 @@
-web: gunicorn potatomail.app:app
+web: gunicorn potatomail:app

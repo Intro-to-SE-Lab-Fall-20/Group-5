@@ -16,7 +16,7 @@ To write a program for a email client which will allow the user to send and reci
 * Send attachments
 
 ## Language/Techniques
-TBD
+Useing Python 3.8 the team is creating a Flask app. The web app will be hosted on Heroku as well as use Heroku's Postgress Database.
 
 ## Members
 ||GitHib username|

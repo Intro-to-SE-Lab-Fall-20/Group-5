@@ -49,7 +49,7 @@ def receive_emails(server, inbox, N, username, password):
 			if isinstance(response, tuple):
 				# parse a bytes email into a message object
 				msg = email.message_from_bytes(response[1])
-				
+
 				# decode the email subject
 				subject = decode_header(msg["Subject"])[0][0]
 				if isinstance(subject, bytes):
@@ -60,7 +60,7 @@ def receive_emails(server, inbox, N, username, password):
 
 				to_ = msg.get("To")
 				#print("Subject:", subject)
-				
+
 				# if the email message is multipart
 				if msg.is_multipart():
 					# iterate over email parts
@@ -100,7 +100,7 @@ def receive_emails(server, inbox, N, username, password):
 						# open in the default browser
 						webbrowser.open(filepath)
 					#print("=" * 100)
-				
+
 				emails.append({
 					"sender": from_,
 					"receiver": to_,

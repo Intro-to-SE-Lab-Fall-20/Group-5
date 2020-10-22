@@ -9,6 +9,7 @@ import os
 def folder_list(server, username, password):
 	imap = imaplib.IMAP4_SSL(server)
 	# authenticate
+
 	try:
 		imap.login(username, password)
 	except:
@@ -55,6 +56,7 @@ def receive_emails(server, inbox, N, username, password):
 	# create an IMAP4 class with SSL
 	imap = imaplib.IMAP4_SSL(server)
 	# authenticate
+
 	try:
 		imap.login(username, password)
 

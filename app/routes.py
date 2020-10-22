@@ -4,10 +4,12 @@ from app.forms import LoginForm, ComposeEmail, RegistrationForm, RegisterEmailFo
 from flask_login import login_user, logout_user, current_user, login_required
 from app.models import Email, User, User_Email, get_accounts_count, get_accounts, get_account_by_id, get_account_by_email	
 from app.smtp import sendemail
+
 from app.email_reader import receive_emails, folder_list, check_connection
 
 
 from urllib.parse import unquote_plus
+
 
 @app.route('/inbox/', methods=['GET', 'POST'])
 @app.route('/inbox/<path:email_account>/<path:folder>', methods=['GET', 'POST'])
@@ -16,7 +18,9 @@ from urllib.parse import unquote_plus
 @login_required   #Commented out till login is implemented
 def inbox(email_account = "", folder = "" ):
 
+
 	# Dummy info while users aren't set up
+
 
 	accounts_count = get_accounts_count(current_user.id)
 	print(accounts_count)
@@ -67,6 +71,7 @@ def inbox(email_account = "", folder = "" ):
 							password=account.decrypt_password())
 
 
+
 			sendemail(account.outgoing_host, account.outgoing_port, email)
 			
 			flash('')
@@ -96,10 +101,12 @@ def register():
 @app.route('/account')
 def account():
 
+
 	print(get_accounts(current_user.id))
 	accounts = get_accounts(current_user.id)
 
 	return render_template('account.html', accounts = accounts)
+
 	
 @app.route('/regsisterEmail', methods=['GET','POST'])
 def registeremail():
@@ -115,6 +122,7 @@ def registeremail():
 		
 		email_account.encrypt_password(form.password.data)
 
+
 		db.session.add(email_account)
 		db.session.commit()
 
@@ -124,8 +132,10 @@ def registeremail():
 
 
 
+
 @app.route('/', methods=['GET','POST'])
 def login():
+
 	if current_user.is_authenticated:
 		return redirect(url_for('inbox'))
 	form = LoginForm()

@@ -1,8 +1,13 @@
 {% extends 'bootstrap/base.html' %}
 
+{% block styles %}
+{{super()}}
+  <link rel="stylesheet" href="{{url_for('.static', filename='my_style.css')}}">
+{% endblock %}
+
 {% block title %}
     {% if title %}
-        {{ title }} - Potato Mail
+        {{ title }} - Hotato Mail
     {% else %}
         Potato Mail
     {% endif %}
@@ -14,45 +19,57 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" >Potato Mail </a>
+                <a class="navbar-brand" href="{{url_for('login')}}">Potato Mail </a>
             </div>
-            <div class="nav navbar-nav">
-                <li><a href=#>Account</a></li> 
-                <li><a href="{{url_for('inbox') }}">Email</a></li>
-                <li><a href=#>Logout</a></li>
+
+            {% if current_user.is_authenticated %}
+                <div class="nav navbar-nav">
 
                 
-                <li class="dropdown d-inline-block">
-                <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Email
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a href="{{url_for('account') }}">Account</a></li> 
+                    <li><a href="{{url_for('logout') }}">Logout</a></li>
 
-                        {% block email_folders %}
-                     
-
-                        {% endblock %}
-                    </div>
-                
-                </li>
-                
-            </div>
+                </div>   
+            {% endif %}    
+                    
+               
+            
         </div>
     </nav>
 {% endblock %}
 
-{% block content %}
-    <div class="container">
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-info" role="alert">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
 
-        {# application content needs to be provided in the app_content block #}
-        {% block app_content %}{% endblock %}
+
+
+{% block content %}
+    
+    
+
+    <div id="wrapper">
+    <!-- Sidebar -->
+        {% if current_user.is_authenticated %}
+        <div id="sidebar-wrapper">
+          <ul class="sidebar-nav">
+            {% block sidenav %}{% endblock %}
+          </ul>
+        </div>
+        {% endif %} 
+    <!-- /#sidebar-wrapper -->
+        <div id="container-fluid" style="padding-left:50px;padding-right:50px;width:100%;">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-info" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            {# application content needs to be provided in the app_content block #}
+            {% block app_content %}{% endblock %}
+            
+        
+        </div>
     </div>
+
 {% endblock %}
 

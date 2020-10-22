@@ -1,0 +1,30 @@
+.sidenav {
+  margin-top:5%;
+  height: 100%;
+  width: 225px;
+
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  padding: 20px;
+}
+
+li {
+    list-style-type: none;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+
+#main {
+  margin-left: 225px; /* Same as the width of the sidenav */
+}
+
+
+#wrapper {
+  display: flex;
+}

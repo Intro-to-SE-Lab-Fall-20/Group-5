@@ -1,18 +1,31 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
-{% block email_folders %}
-
-<form action="" method="post">
-
-{% for folder in folders %}
-
-	<a class="dropdown-item" href="{{url_for('inbox')}}/{{folder}}">{{folder}}</a><br>
 
 
-{% endfor %}
 
-</form>
+
+{% block sidenav %}
+
+	<li class="sidebar-brand">
+        {{email_account}}    
+    </li>
+
+    {% for folder in folders %}
+		{% if folder == current_folder %}
+	  	<li class="nav-item active">
+	   		<a href="{{url_for('inbox')}}{{email_account}}/{{folder}}">{{folder}}</a>
+	  	</li>
+	  	{% else %}	
+
+	  	<li class="nav-item">
+	   		<a href="{{url_for('inbox')}}{{email_account}}/{{folder}}">{{folder}}</a>
+	  	</li>
+	  	{% endif %}
+
+
+	{% endfor %}
+
 
 {% endblock %}
 
@@ -20,7 +33,7 @@
 
 
 {% block app_content %}
-	<h1>Hi, {{ user.username }}!</h1>
+	<h1>Hi, {{ current_user.username}}!</h1>
 
 
 	<a type="button" id="compose_button" onclick="compose()" style="display:inline;"  class="btn btn-dark btn-lg">
@@ -37,23 +50,32 @@
 		<span class="glyphicon glyphicon-share-alt"></span>
 	</a>
 
-	<br><br>
 
+	<br><br>
+	{% if emails|length > 0 %}
 	<div class="table-responsive" style="width: 90%;">
 		<table id="inbox_outbox"  class="table table-striped table-hover">
 
-		{% for email in emails %}
+		
+			{% for email in emails %}
 
-		<tr onclick="expand_email( {{ email.id }} )">
-			<td style="width: 10%;">{{ email.sender }}</td>
-			<td style="width: 80%;">{{ email.subject }}</td> 
-			
-		</tr>
+			<tr onclick="expand_email( {{ email.id }} )">
+				<td style="width: 10%;">{{ email.sender }}</td>
+				<td style="width: 80%;">{{ email.subject }}</td> 
+				
+			</tr>
 
-		{% endfor %}
+			{% endfor %}
+
+
 
 		</table>
 	</div>
+	{% else %}
+
+	<p>No emails here try another box</p>
+
+	{% endif %}
 
 	<div class="table-responsive" style="width: 90%;">
 
@@ -97,13 +119,13 @@
 
     		<p>
 
-    		{{ wtf.form_field(form.message, class='form-control', 
-
-        	placeholder='message', id = 'compose_body') }}
+    		{{ wtf.form_field(form.message, class='form-control', id = 'compose_body') }}
 
        		
         	
     		</p>
+
+
     		<p>{{ form.submit() }}</p>
 
 
@@ -126,7 +148,6 @@
 		var emails = {{ emails|tojson }}
 
 
-
 		for (i = 0; i < emails.length; i++) { 
 				if (index == emails[i].id){
 					console.log(emails[i].receiver)
@@ -142,8 +163,10 @@
 		document.getElementById("back_button").style.display = "inline";
 		document.getElementById("reply_button").style.display = "inline";
 
+
 	}
 
+	
 	function sanatize_emails(s){
 		if(s.substring( s.lastIndexOf("<") + 1, s.lastIndexOf(">"))){
 			return s.substring( s.lastIndexOf("<") + 1, s.lastIndexOf(">"));

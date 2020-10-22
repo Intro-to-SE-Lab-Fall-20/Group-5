@@ -33,45 +33,51 @@
 		<span class="glyphicon glyphicon-arrow-left"></span>
 	</a>
 
+	<a type="button" id="reply_button" onclick="reply()" style="display:none;" class="btn btn-dark btn-lg">
+		<span class="glyphicon glyphicon-share-alt"></span>
+	</a>
+
 	<br><br>
 
 	<div class="table-responsive" style="width: 90%;">
-	<table id="inbox_outbox"  class="table table-striped table-hover">
+		<table id="inbox_outbox"  class="table table-striped table-hover">
 
-	{% for email in emails %}
+		{% for email in emails %}
 
-	<tr onclick="expand_email( {{ email.id }} )">
-		<td style="width: 10%;">{{ email.sender }}</td>
-		<td style="width: 80%;">{{ email.subject }}</td> 
-		
-	</tr>
+		<tr onclick="expand_email( {{ email.id }} )">
+			<td style="width: 10%;">{{ email.sender }}</td>
+			<td style="width: 80%;">{{ email.subject }}</td> 
+			
+		</tr>
 
-	{% endfor %}
+		{% endfor %}
 
-	</table>
+		</table>
 	</div>
 
 	<div class="table-responsive" style="width: 90%;">
-	<table id="email_display" style="display: none;" class="table ">
 
-		<tr>
-			<td style="width: 10%"> To: </td>
-			<td id="to__" style="width: 80%"> </td>
-		</tr>
-		<tr>
-			<td style="width: 10%"> From: </td>
-			<td id="from__" style="width: 80%"> </td>
-		</tr>
-		<tr>
-			<td> Subject: </td>
-			<td id="subject"> </td>
-		</tr>
-		<tr>
-			<td> </td>
-			<td id="body"></td>
-		</tr>
+		<table id="email_display" style="display: none;" class="table ">
 
-	</table>
+			<tr>
+				<td style="width: 10%"> To: </td>
+				<td id="to__" style="width: 80%"> </td>
+			</tr>
+			<tr>
+				<td style="width: 10%"> From: </td>
+				<td id="from__" style="width: 80%"> </td>
+			</tr>
+			<tr>
+				<td> Subject: </td>
+				<td id="subject"> </td>
+			</tr>
+			<tr>
+				<td> </td>
+				<td id="body"></td>
+			</tr>
+
+		</table>
+
 	</div>
 
 	<div id="compose_form" style="display:none;" class="form-group float-label-control">
@@ -82,28 +88,34 @@
         	<div class="form-group float-label-contro">
 
         	{{ wtf.form_field(form.reciever, class='form-control', 
-        	placeholder='receiver email') }}
+
+        	placeholder='receiver email',  id = 'compose_to') }}
     		
     		{{ wtf.form_field(form.subject, class='form-control', 
-        	placeholder='subject') }}
+        	placeholder='subject', id = 'compose_subject') }}
+
 
     		<p>
 
     		{{ wtf.form_field(form.message, class='form-control', 
-        	placeholder='message') }}
+
+        	placeholder='message', id = 'compose_body') }}
+
        		
         	
     		</p>
     		<p>{{ form.submit() }}</p>
 
+
     	</div>	
 		</form>
-
 	</div>
 
 
 
 	<script>
+
+
 	function expand_email(index) {
 		//<!-- Hides table -->
 			document.getElementById("inbox_outbox").style.display= "none";
@@ -113,7 +125,7 @@
 
 		var emails = {{ emails|tojson }}
 
-		console.log(emails)
+
 
 		for (i = 0; i < emails.length; i++) { 
 				if (index == emails[i].id){
@@ -128,7 +140,17 @@
 
 		document.getElementById("email_display").style.display = "block";
 		document.getElementById("back_button").style.display = "inline";
+		document.getElementById("reply_button").style.display = "inline";
 
+	}
+
+	function sanatize_emails(s){
+		if(s.substring( s.lastIndexOf("<") + 1, s.lastIndexOf(">"))){
+			return s.substring( s.lastIndexOf("<") + 1, s.lastIndexOf(">"));
+		}
+		return s;
+
+		
 	}
 
 	function sanatize_emails(s){
@@ -139,6 +161,7 @@
 	function display_email_list(){
 		document.getElementById("email_display").style.display = "none";
 		document.getElementById("back_button").style.display = "none";
+		document.getElementById("reply_button").style.display = "none";
 
 		document.getElementById("inbox_outbox").style.display= "block";
 		document.getElementById("compose_form").style.display= "none";
@@ -156,6 +179,16 @@
 
 
 
+	}
+
+	function reply(){
+
+		document.getElementById("compose_to").value = document.getElementById("from__").innerHTML;
+
+		console.log(document.getElementById("to__").innerHTML) 
+		document.getElementById("compose_subject").value = document.getElementById("subject").innerHTML; 
+		 
+		compose();
 	}
 	
 

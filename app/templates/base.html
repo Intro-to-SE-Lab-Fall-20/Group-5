@@ -1,39 +1,77 @@
 {% extends 'bootstrap/base.html' %}
 
+{% block styles %}
+{{super()}}
+  <link rel="stylesheet" href="{{url_for('.static', filename='my_style.css')}}">
+{% endblock %}
+
 {% block title %}
     {% if title %}
-        {{ title }} - Potato Mail
+        {{ title }} - Hotato Mail
     {% else %}
         Potato Mail
     {% endif %}
 {% endblock %}
 
- {% block navbar %}
+
+{% block navbar %}
+
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" >Potato Mail </a>
-            </div>
-            <div class="nav navbar-nav">
+                <a class="navbar-brand" href="{{url_for('login')}}">Potato Mail </a>
                 <li><a href="{{url_for('test') }}">Home</a></li>
-                <li><a href="{{url_for('login') }}">Login</a></li>
                 <li><a href="{{url_for('index') }}">Inbox</a></li>
-
-
+              <li><a href="{{url_for('Register')}}">Register</a></li>
             </div>
+
+            {% if current_user.is_authenticated %}
+                <div class="nav navbar-nav">
+
+                
+                    <li><a href="{{url_for('account') }}">Account</a></li> 
+                    <li><a href="{{url_for('logout') }}">Logout</a></li>
+
+                </div>   
+            {% endif %}    
+                    
+               
+            
         </div>
     </nav>
-  {% endblock %}
-        <hr>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li}
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-        {% block app_content %}{% endblock %}
-    </body>
-</html>
+{% endblock %}
+
+
+
+
+{% block content %}
+    
+    
+
+    <div id="wrapper">
+    <!-- Sidebar -->
+        {% if current_user.is_authenticated %}
+        <div id="sidebar-wrapper">
+          <ul class="sidebar-nav">
+            {% block sidenav %}{% endblock %}
+          </ul>
+        </div>
+        {% endif %} 
+    <!-- /#sidebar-wrapper -->
+        <div id="container-fluid" style="padding-left:50px;padding-right:50px;width:100%;">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-info" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            {# application content needs to be provided in the app_content block #}
+            {% block app_content %}{% endblock %}
+            
+        
+        </div>
+    </div>
+
+{% endblock %}

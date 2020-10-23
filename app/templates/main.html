@@ -121,9 +121,16 @@
 
     		{{ wtf.form_field(form.message, class='form-control', id = 'compose_body') }}
 
-       		
         	
-    		</p>
+			</p>
+			
+			<p>
+			
+					
+			{{ wtf.form_field(form.files, class='form-control', id = 'add_files')}}
+
+
+			</p>
 
 
     		<p>{{ form.submit() }}</p>
@@ -131,6 +138,9 @@
 
     	</div>	
 		</form>
+		<!--<form method="POST" action="addfile">
+			<p><input type="file" name="file" multiple></p>
+		</form> !-->
 	</div>
 
 

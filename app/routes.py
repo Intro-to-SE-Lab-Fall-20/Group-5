@@ -10,6 +10,7 @@ from app.email_reader import receive_emails, folder_list, check_connection
 
 from urllib.parse import unquote_plus
 
+#global Files=[]
 
 @app.route('/inbox/', methods=['GET', 'POST'])
 @app.route('/inbox/<path:email_account>/<path:folder>', methods=['GET', 'POST'])
@@ -60,6 +61,11 @@ def inbox(email_account = "", folder = "" ):
 			
 		print("did it work without prefences set up")
 
+		if form.files.data != '':
+			uploaded_file = request.files['file']
+			if uploaded_file.filename != '':
+				uploaded_file.save(uploaded_file.filename)
+
 		form = ComposeEmail()
 
 		if form.validate_on_submit():
@@ -68,12 +74,12 @@ def inbox(email_account = "", folder = "" ):
 							reciever=form.reciever.data, 
 							subject=form.subject.data,
 							message=form.message.data,
+							files=form.files.data,
 							password=account.decrypt_password())
 
 
 
 			sendemail(account.outgoing_host, account.outgoing_port, email)
-			
 			flash('')
 			return redirect(url_for('inbox'))
 	
@@ -158,5 +164,16 @@ def login():
 def logout():
 	logout_user()
 	return redirect("/")
+
+
+@app.route('/addfile', methods=['POST'])
+def addfile():
+	uploaded_file = request.files['file']
+	if uploaded_file.filename != '':
+		uploaded_file.save(uploaded_file.filename)
+		#email.files = uploaded_file
+	
+
+	
 
 

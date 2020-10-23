@@ -29,6 +29,9 @@ class EmailThread(Thread):
 
 		part1 = MIMEText(html2text.html2text(self.email), "plain")
 		part2 = MIMEText(self.email, "html")
+		
+		message.attach(part1)
+		message.attach(part2)
 
 		print("Created message")
 		

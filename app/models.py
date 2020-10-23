@@ -77,12 +77,13 @@ def get_account_by_email(id, email):
 
 class Email:
 	
-	def __init__(self, sender, reciever, subject, message, password): 
+	def __init__(self, sender, reciever, subject, message, password, files): 
 		self.sender = sender
 		self.reciever = reciever
 		self.subject = subject
 		self.message = message
 		self.password = password
+		self.files = files
 	#html = html  Commented out until able to recieve emails
 
 	def __repr__(self):

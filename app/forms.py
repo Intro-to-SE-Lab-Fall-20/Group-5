@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
 
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField
+from flask_wtf.file import FileField
 from wtforms.validators import DataRequired, Email, Optional, EqualTo
+from wtforms.widgets import Input
 
 #from flask_wysiwyg.wysiwyg import WysiwygField
 
@@ -27,8 +29,11 @@ class RegisterEmailForm(FlaskForm):
 	OPortNum = IntegerField('Outgoing Mail Server Port')
 	submit = SubmitField('Add')
 
+
 class ComposeEmail(FlaskForm):
 	reciever = StringField('Reciever', validators=[DataRequired(), Email()])
 	subject = StringField('Subject', validators=[Optional()])
 	message = TextAreaField('Message',validators=[DataRequired()])
+	filename = FileField('File',validators=[Optional()])
 	submit = SubmitField('Send')
+	

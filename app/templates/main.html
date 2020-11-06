@@ -104,10 +104,10 @@
 
 	<div id="compose_form" style="display:none;" class="form-group float-label-control">
 
-		<form action="" method="post" novalidate>
+		<form action="" method="post" enctype="multipart/form-data" nonvalidate>
     		{{ form.hidden_tag() }}
     		
-        	<div class="form-group float-label-contro">
+        	<div class="form-group float-label-control">
 
         	{{ wtf.form_field(form.reciever, class='form-control', 
 
@@ -121,9 +121,16 @@
 
     		{{ wtf.form_field(form.message, class='form-control', id = 'compose_body') }}
 
-       		
         	
-    		</p>
+			</p>
+			
+			<p>
+			
+					
+			{{ wtf.form_field(form.filename, class='form-control', id = 'add_files')}}
+
+
+			</p>
 
 
     		<p>{{ form.submit() }}</p>
@@ -131,6 +138,9 @@
 
     	</div>	
 		</form>
+		<!--<form method="POST" action="addfile">
+			<p><input type="file" name="file" multiple></p>
+		</form> !-->
 	</div>
 
 

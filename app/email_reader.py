@@ -93,7 +93,7 @@ def receive_emails(server, inbox, N, username, password):
 					from_ = msg.get("From")
 
 					to_ = msg.get("To")
-					#xprint("Subject:", subject)
+					print("Subject:", subject)
 					
 					# if the email message is multipart
 					if msg.is_multipart():

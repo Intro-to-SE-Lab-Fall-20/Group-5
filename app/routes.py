@@ -49,7 +49,7 @@ def inbox(email_account = "", folder = "" ):
 			account = get_account_by_email(current_user.id, unquote_plus(email_account))
 		else:
 			if(accounts_count == 1 ):
-				print("one email for user found")
+				#print("one email for user found")
 				account = get_account_by_id(current_user.id)
 			else:
 				account = get_account_by_email(current_user.id, unquote_plus(current_user.preferred_email))
@@ -58,7 +58,7 @@ def inbox(email_account = "", folder = "" ):
 			if(current_user.preferred_folder):
 				folder = current_user.preferred_folder
 			else:
-				print("no prefrence for folder set")
+				#print("no prefrence for folder set")
 				try:
 					folder = folder_list(account.incoming_host, account.username, account.decrypt_password())[0]
 				except:
@@ -71,8 +71,6 @@ def inbox(email_account = "", folder = "" ):
 		folders = folder_list(account.incoming_host, account.username, account.decrypt_password())
 		emails = receive_emails(account.incoming_host, f, 15, account.username, account.decrypt_password())
 			
-		print("did it work without prefences set up")
-	
 
 		form = ComposeEmail()
 
@@ -83,6 +81,10 @@ def inbox(email_account = "", folder = "" ):
 		'''
 		if form.validate_on_submit():
 			# lc.user_name and lc.password are in place to hide my testing email
+			''''uploaded_file = request.files['file']
+			if uploaded_file.filename != '':
+				uploaded_file.save(uploaded_file.filename)'''
+			#####  = open("filename", "rb") 
 			email = Email(	sender=account.username,      
 							reciever=form.reciever.data, 
 							subject=form.subject.data,

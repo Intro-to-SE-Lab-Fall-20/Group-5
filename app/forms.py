@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField
 from flask_wtf.file import FileField
+
 from wtforms.validators import DataRequired, Email, Optional, EqualTo
 from wtforms.widgets import Input
 

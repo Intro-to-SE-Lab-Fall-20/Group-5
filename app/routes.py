@@ -49,7 +49,7 @@ def inbox(email_account = "", folder = "" ):
 			account = get_account_by_email(current_user.id, unquote_plus(email_account))
 		else:
 			if(accounts_count == 1 ):
-				#print("one email for user found")
+				print("one email for user found")
 				account = get_account_by_id(current_user.id)
 			else:
 				account = get_account_by_email(current_user.id, unquote_plus(current_user.preferred_email))
@@ -58,7 +58,7 @@ def inbox(email_account = "", folder = "" ):
 			if(current_user.preferred_folder):
 				folder = current_user.preferred_folder
 			else:
-				#print("no prefrence for folder set")
+				print("no prefrence for folder set")
 				try:
 					folder = folder_list(account.incoming_host, account.username, account.decrypt_password())[0]
 				except:
@@ -71,20 +71,12 @@ def inbox(email_account = "", folder = "" ):
 		folders = folder_list(account.incoming_host, account.username, account.decrypt_password())
 		emails = receive_emails(account.incoming_host, f, 15, account.username, account.decrypt_password())
 			
+		print("did it work without prefences set up")
+	
 
 		form = ComposeEmail()
 
-		'''
-		uploaded_file = request.files['file']
-		if uploaded_file.filename != '':
-			uploaded_file.save(uploaded_file.filename)
-		'''
 		if form.validate_on_submit():
-			# lc.user_name and lc.password are in place to hide my testing email
-			''''uploaded_file = request.files['file']
-			if uploaded_file.filename != '':
-				uploaded_file.save(uploaded_file.filename)'''
-			#####  = open("filename", "rb") 
 			email = Email(	sender=account.username,      
 							reciever=form.reciever.data, 
 							subject=form.subject.data,
@@ -92,13 +84,7 @@ def inbox(email_account = "", folder = "" ):
 							filename=form.filename.data,
 							password=account.decrypt_password())
 
-			'''
-			uploaded_file = request.files['file']
-			if uploaded_file.file != '':
-
-				uploaded_file.save(uploaded_file.file)
-				email.files = uploaded_file
-			'''
+			
 
 			sendemail(account.outgoing_host, account.outgoing_port, email)
 			flash('')
@@ -107,15 +93,15 @@ def inbox(email_account = "", folder = "" ):
 
 		return render_template('main.html', folders = folders,  emails = emails, form=form, email_account = account.username, current_folder = unquote_plus(folder))
 
-@app.route('/notepath', methods=['GET','POST'])
-def notepath():
+@app.route('/dashboard', methods=['GET','POST'])
+def dashboard():
 	if request.method == 'POST':
 		if request.form['submit_button'] == "Go to INBOX":
 			return redirect(url_for('inbox'))
 		elif request.form['submit_button'] == "Go to NOTES":
 			return redirect(url_for('notesapp'))
 	elif request.method == 'GET':
-		return render_template('note.html')
+		return render_template('dashboard.html')
 
 @app.route('/notepad', methods=['GET','POST'])
 def notepad():

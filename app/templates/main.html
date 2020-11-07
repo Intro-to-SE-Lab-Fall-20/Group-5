@@ -4,6 +4,7 @@
 
 
 
+
 {% block sidenav %}
 
 	<li class="sidebar-brand">
@@ -25,6 +26,7 @@
 
 	{% endfor %}
 
+
 {% endblock %}
 
 
@@ -34,7 +36,7 @@
 	<h1>Hi, {{ current_user.username}}!</h1>
 
 
-	<a type="button" id="compose_button" onclick="compose(1)" style="display:inline;"  class="btn btn-dark btn-lg">
+	<a type="button" id="compose_button" onclick="compose()" style="display:inline;"  class="btn btn-dark btn-lg">
         <span class="glyphicon glyphicon-envelope"></span>
     </a>
 
@@ -48,14 +50,12 @@
 		<span class="glyphicon glyphicon-share-alt"></span>
 	</a>
 
-	<a type="button" id="forward_button" onclick="forward()" style="display:none;" class="btn btn-dark btn-lg">
-		<span class="glyphicon glyphicon-forward"></span>
-	</a>
 
 	<br><br>
 	{% if emails|length > 0 %}
 	<div class="table-responsive" style="width: 90%;">
 		<table id="inbox_outbox"  class="table table-striped table-hover">
+
 		
 			{% for email in emails %}
 
@@ -68,6 +68,7 @@
 			{% endfor %}
 
 
+
 		</table>
 	</div>
 	{% else %}
@@ -77,6 +78,7 @@
 	{% endif %}
 
 	<div class="table-responsive" style="width: 90%;">
+
 		<table id="email_display" style="display: none;" class="table ">
 
 			<tr>
@@ -97,6 +99,7 @@
 			</tr>
 
 		</table>
+
 	</div>
 
 	<div id="compose_form" style="display:none;" class="form-group float-label-control">
@@ -107,10 +110,12 @@
         	<div class="form-group float-label-control">
 
         	{{ wtf.form_field(form.reciever, class='form-control', 
+
         	placeholder='receiver email',  id = 'compose_to') }}
     		
     		{{ wtf.form_field(form.subject, class='form-control', 
         	placeholder='subject', id = 'compose_subject') }}
+
 
     		<p>
 
@@ -127,16 +132,9 @@
 
 			</p>
 
-    		<p>
-			
-					
-			{{ wtf.form_field(form.files, class='form-control', id = 'add_files')}}
-
-
-			</p>
-
 
     		<p>{{ form.submit() }}</p>
+
 
     	</div>	
 		</form>
@@ -164,7 +162,6 @@
 
 		var emails = {{ emails|tojson }}
 
-		
 
 		for (i = 0; i < emails.length; i++) { 
 				if (index == emails[i].id){
@@ -181,16 +178,22 @@
 		document.getElementById("back_button").style.display = "inline";
 		document.getElementById("reply_button").style.display = "inline";
 
-		document.getElementById("forward_button").style.display = "inline";
 
 	}
 
+	
 	function sanatize_emails(s){
 		if(s.substring( s.lastIndexOf("<") + 1, s.lastIndexOf(">"))){
 			return s.substring( s.lastIndexOf("<") + 1, s.lastIndexOf(">"));
 		}
 		return s;
+
 		
+	}
+
+	function sanatize_emails(s){
+		s = s.replace("<", "");
+		return s.replace(">", "");
 	}
 
 	function display_email_list(){
@@ -200,9 +203,10 @@
 
 		document.getElementById("inbox_outbox").style.display= "block";
 		document.getElementById("compose_form").style.display= "none";
+
 	}
 
-	function compose(clear){
+	function compose(){
 		document.getElementById("email_display").style.display = "none";
 		document.getElementById("back_button").style.display = "inline";
 
@@ -211,33 +215,18 @@
 
 		document.getElementById("compose_form").style.display= "block";
 
-		if(clear){
-			document.getElementById("compose_to").value = "";
-			document.getElementById("compose_subject").value = "";
-			document.getElementById("compose_body").value = "";
-			tinyMCE.activeEditor.setContent("");
 
-		}
+
 	}
 
 	function reply(){
 
 		document.getElementById("compose_to").value = document.getElementById("from__").innerHTML;
+
+		console.log(document.getElementById("to__").innerHTML) 
 		document.getElementById("compose_subject").value = document.getElementById("subject").innerHTML; 
 		 
-		compose(0);
-	}
-
-	function forward(){
-
-		document.getElementById("compose_subject").value = document.getElementById("subject").innerHTML; 
-
-		document.getElementById("compose_body").value = document.getElementById("body").innerHTML; 
-
-		console.log(document.getElementById("compose_body").value);
-		tinyMCE.activeEditor.setContent(document.getElementById("body").innerHTML);
-		 
-		compose(0);
+		compose();
 	}
 	
 

@@ -37,10 +37,7 @@ def check_connection(server, username, password):
 	# authenticate
 	try:
 		imap.login(username, password)
-		print("Conection Sucessful")
 		imap.logout()
-		print("Conection Sucessful")
-
 		return True
 
 	except: 
@@ -52,20 +49,16 @@ def check_connection(server, username, password):
 def receive_emails(server, inbox, N, username, password):
 	# account credentials
 
-
 	# create an IMAP4 class with SSL
 	imap = imaplib.IMAP4_SSL(server)
 	# authenticate
 
 	try:
 		imap.login(username, password)
-
-	
 		status, messages = imap.select(inbox)
 		# number of top emails to fetch
 		# total number of emails
 		messages = int(messages[0])
-
 
 		if messages < N:
 			N = messages
@@ -93,7 +86,6 @@ def receive_emails(server, inbox, N, username, password):
 					from_ = msg.get("From")
 
 					to_ = msg.get("To")
-					#xprint("Subject:", subject)
 					
 					# if the email message is multipart
 					if msg.is_multipart():

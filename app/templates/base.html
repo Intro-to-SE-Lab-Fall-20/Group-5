@@ -4,7 +4,6 @@
 {{super()}}
   <link rel="stylesheet" href="{{url_for('.static', filename='my_style.css')}}">
   <script src="https://cdn.tiny.cloud/1/pjb5c1nk0do71sqckykoreyq6l468e239ovnac6ru707gcl1/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-</head>
 {% endblock %}
 
 {% block title %}
@@ -23,8 +22,10 @@
             <div class="navbar-header">
                 <a class="navbar-brand" href="{{url_for('login')}}">Potato Mail </a>
             </div>
+
             {% if current_user.is_authenticated %}
                 <div class="nav navbar-nav">
+
                 
                     <li><a href="{{url_for('account') }}">Account</a></li> 
                     <li><a href="{{url_for('logout') }}">Logout</a></li>

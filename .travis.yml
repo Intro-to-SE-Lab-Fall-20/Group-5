@@ -11,5 +11,5 @@ install:
    
    
 script:
-  - $(shell export PYTHONPATH=$PYTHONPATH:$(pwd))
+  - $(PYTHONPATH=$PYTHONPATH:$(pwd))
   - pytest

@@ -15,9 +15,11 @@ login.login_view = 'login'
 load_dotenv()
 
 DB_URL = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=os.getenv("POSTGRES_USER"),pw=os.getenv("POSTGRES_PW"),url=os.getenv("POSTGRES_URL"),db=os.getenv("POSTGRES_DB"))
-
+UPLOAD_FOLDER = os.path.abspath('uploads/')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation warning
+
 
 db = SQLAlchemy(app)
 

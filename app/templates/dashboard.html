@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+
+<p>
+    <!--<input type="button"
+    onclick="history.back();"
+    value="Go to INBOX" />
+
+    <input type="button"
+    onclick="history.forward();"
+    value="Go to NOTES" />-->
+</p>
+
+<p>
+    <button onclick="window.location.href='/inbox'">Go to INBOX</button>
+    <button onclick="window.location.href='/notepad'">Go to NOTES</button>
+   <!--<input type="submit" name="submit_button" value="Go to INBOX"/>
+    <input type="submit" name="submit_button" value="Go to NOTES"/>-->
+
+</p>
+
+
+
+{% endblock %}

@@ -103,6 +103,8 @@ def _make_mime(email):
 
 def sendemail(smtp_server, port, email):
 
+	if not os.path.exists('uploads/'):
+		os.makedirs('uploads/')
 	try:
 		context = ssl.create_default_context()
 		with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:

@@ -69,7 +69,7 @@ def receive_emails(server, inbox, N, username, password):
 			# fetch the email message by ID
 			res, msg = imap.fetch(str(i), "(RFC822)")
 			for response in msg:
-
+				attachment = ""
 				if isinstance(response, tuple):
 					# parse a bytes email into a message object
 					msg = email.message_from_bytes(response[1])
@@ -90,8 +90,10 @@ def receive_emails(server, inbox, N, username, password):
 					# if the email message is multipart
 					if msg.is_multipart():
 						# iterate over email parts
+						
 						for part in msg.walk():
 							# extract content type of email
+
 							content_type = part.get_content_type()
 							content_disposition = str(part.get("Content-Disposition"))
 							try:
@@ -100,13 +102,20 @@ def receive_emails(server, inbox, N, username, password):
 							except:
 								pass
 							if "attachment" in content_disposition:
+								
 								# download attachment
 								filename = part.get_filename()
+								print(filename)
+								attachment = filename
 								if filename:
-									if not os.path.isdir(subject):
+									print("THIS ONE's got an email", subject)
+									sanatized_subject = subject.rstrip().replace(" ", "_")
+									if not os.path.isdir(sanatized_subject):
+
 										# make a folder for this email (named after the subject)
-										os.mkdir(subject)
-									filepath = os.path.join(subject, filename)
+										os.mkdir(sanatized_subject)
+
+									filepath = os.path.join(sanatized_subject, filename)
 									# download attachment and save it
 									open(filepath, "wb").write(part.get_payload(decode=True))
 					else:
@@ -132,7 +141,8 @@ def receive_emails(server, inbox, N, username, password):
 						"receiver": to_,
 						"subject": subject,
 						"body": body,
-						"id": i
+						"id": i, 
+						"attachment": attachment
 					})
 		imap.close()
 		imap.logout()

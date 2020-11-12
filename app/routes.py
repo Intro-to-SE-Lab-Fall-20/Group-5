@@ -186,6 +186,10 @@ def logout():
 	logout_user()
 	return redirect("/")
 
+@app.errorhandler(429)
+def ratelimit_handler(e):
+    return render_template('429.html'), 429
+
 
 @app.route('/addfile', methods=['GET','POST'])
 def addfile():

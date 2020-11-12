@@ -81,7 +81,7 @@ def _make_mime(email):
 	message['Subject'] = email.subject
 	message['From'] = email.sender
 	message['To'] = email.reciever
-	part1 = MIMEText(html2text.html2text(email.message), "plain")
+	part1 = MIMEText(html2text.html2text(email.message), "text")
 	part2 = MIMEText(email.message, "html")
 
 	message.attach(part1)

@@ -93,14 +93,10 @@ def receive_emails(server, inbox, N, username, password):
 						
 						for part in msg.walk():
 							# extract content type of email
-
+							
 							content_type = part.get_content_type()
 							content_disposition = str(part.get("Content-Disposition"))
-							try:
-								# get the email body
-								body = part.get_payload(decode=True).decode()
-							except:
-								pass
+							
 							if "attachment" in content_disposition:
 								
 								# download attachment
@@ -118,6 +114,13 @@ def receive_emails(server, inbox, N, username, password):
 									filepath = os.path.join(sanatized_subject, filename)
 									# download attachment and save it
 									open(filepath, "wb").write(part.get_payload(decode=True))
+							else:
+								try:
+									# get the email body
+									body = part.get_payload(decode=True).decode()
+								except:
+									pass
+
 					else:
 						# extract content type of email
 						content_type = msg.get_content_type()

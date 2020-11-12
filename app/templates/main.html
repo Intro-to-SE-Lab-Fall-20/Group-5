@@ -62,6 +62,7 @@
 			<tr onclick="expand_email( {{ email.id }} )">
 				<td style="width: 10%;">{{ email.sender }}</td>
 				<td style="width: 80%;">{{ email.subject }}</td> 
+				<td style="width: 80%;">{{ email.attachment }}</td> 
 				
 			</tr>
 
@@ -97,6 +98,10 @@
 				<td> </td>
 				<td id="body"></td>
 			</tr>
+
+			<tr>
+				<td></td>
+				<td id="email_attachement" ></td>
 
 		</table>
 
@@ -166,11 +171,23 @@
 		for (i = 0; i < emails.length; i++) { 
 				if (index == emails[i].id){
 					console.log(emails[i].receiver)
+					let subject = emails[i].subject;
+					let filename = emails[i].attachment;
 					
 					document.getElementById("to__").innerHTML  = sanatize_emails(emails[i].receiver);
 					document.getElementById("from__").innerHTML  = sanatize_emails(emails[i].sender);
 					document.getElementById("subject").innerHTML  = emails[i].subject;
 					document.getElementById("body").innerHTML  = "<pre>" + emails[i].body + "</pre>";
+					document.getElementById("email_attachement").innerHTML = '<a href=' + 
+						'http://localhost:5000/inbox/files/'+ 
+						encodeURIComponent(subject.trim()) +
+						'/' +
+						encodeURIComponent(filename.trim()) + 
+						'>' +
+						filename +
+						'</a>' ;
+
+					
 				}
 		}
 

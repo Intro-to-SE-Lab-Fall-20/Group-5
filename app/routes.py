@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for, request, session, send_from_directory
-from app import app, db
+from app import app, db, limiter
 from app.forms import LoginForm, ComposeEmail, RegistrationForm, RegisterEmailForm
 from flask_login import login_user, logout_user, current_user, login_required
 from app.models import Email, User, User_Email, get_accounts_count, get_accounts, get_account_by_id, get_account_by_email	
@@ -158,6 +158,9 @@ def registeremail():
 
 
 @app.route('/', methods=['GET','POST'])
+#@limiter.limit("100/day")
+#@limiter.limit("10/hour")
+@limiter.limit("3/minute")
 def login():
 
 	if current_user.is_authenticated:

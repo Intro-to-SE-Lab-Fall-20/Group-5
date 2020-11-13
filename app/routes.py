@@ -1,12 +1,12 @@
-from flask import render_template, flash, redirect, url_for, request, session
-from app import app, db
+from flask import render_template, flash, redirect, url_for, request, session, send_from_directory
+from app import app, db, limiter
 from app.forms import LoginForm, ComposeEmail, RegistrationForm, RegisterEmailForm
 from flask_login import login_user, logout_user, current_user, login_required
-from app.models import Email, User, User_Email, get_accounts_count, get_accounts, get_account_by_id, get_account_by_email	
+from app.models import Email, User, User_Email, get_accounts_count, get_accounts, get_account_by_id, get_account_by_email
 from app.smtp import sendemail
 
 from app.email_reader import receive_emails, folder_list, check_connection
-
+from pathlib import Path
 import pathlib
 import os
 
@@ -64,10 +64,7 @@ def inbox(email_account = "", folder = "" ):
 
 		folders = folder_list(account.incoming_host, account.username, account.decrypt_password())
 		emails = receive_emails(account.incoming_host, f, 15, account.username, account.decrypt_password())
-			
 		
-	
-
 		form = ComposeEmail()
 
 		if form.validate_on_submit():
@@ -81,26 +78,26 @@ def inbox(email_account = "", folder = "" ):
 			
 
 			sendemail(account.outgoing_host, account.outgoing_port, email)
-			flash('')
+			
 			return redirect(url_for('inbox'))
 	
 
 		return render_template('main.html', folders = folders,  emails = emails, form=form, email_account = account.username, current_folder = unquote_plus(folder))
 
-@app.route('/dashboard', methods=['GET','POST'])
+@app.route('/inbox/files/<path:subject>/<path:filename>')
+def retrive_attatchment(subject, filename):
+	full_filename = os.path.join(Path.cwd(), subject.replace(" ", "_"))
+	print(full_filename)
+	fp = open(os.path.join(full_filename, filename.replace(" ", "_")))
+	return send_from_directory(full_filename, filename.replace(" ", "_"))
+
+@app.route('/dashboard', methods=['GET'])
 def dashboard():
-	if request.method == 'POST':
-		if request.form['submit_button'] == "Go to INBOX":
-			return redirect(url_for('inbox'))
-		elif request.form['submit_button'] == "Go to NOTES":
-			return redirect(url_for('notepad'))
-	elif request.method == 'GET':
-		return render_template('dashboard.html')
+	return render_template('dashboard.html')
 
 @app.route('/notepad', methods=['GET','POST'])
 def notepad():
 	return render_template('notepad.html')
-	
 
 @app.route('/r', methods=['GET','POST'])
 def register():
@@ -154,6 +151,9 @@ def registeremail():
 
 
 @app.route('/', methods=['GET','POST'])
+#@limiter.limit("100/day")
+#@limiter.limit("10/hour")
+@limiter.limit("3/minute")
 def login():
 
 	if current_user.is_authenticated:
@@ -179,37 +179,8 @@ def logout():
 	logout_user()
 	return redirect("/")
 
-
-@app.route('/addfile', methods=['GET','POST'])
-def addfile():
-	if request.method == 'POST':
-		if 'file' not in request.files:
-			flash('No file part')
-			return redirect(url_for('inbox'))
-		file = request.files['file']
-		if file.filename == '':
-			flash('No selected file')
-			return redirect(request.url)
-		if file and allowed_file(file.filename):
-			filename = secure_filename(file.filename)
-			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-			return redirect(url_for('uploaded_file', filename=filename))
-	"""
-	uploaded_file = request.files['file']
-	if uploaded_file.filename != '':
-		uploaded_file.save(uploaded_file.filename)
-		#email.files = uploaded_file
-	"""
-	return '''
-	<!doctype html>
-	<title>Upload new File</title>
-	<h1>Upload new File</h1>
-	<form method=post enctype=multipart/form-data>
-		<input type=file name=file>
-		<input type=submit value=Upload>
-	</form>
-	'''
-
-	
+@app.errorhandler(429)
+def ratelimit_handler(e):
+	return render_template('429.html'), 429
 
 

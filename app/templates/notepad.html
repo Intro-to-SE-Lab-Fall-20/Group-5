@@ -1,10 +1,45 @@
-<!DOCTYPE html>
-<html>
-    <head>
-    </head>
-    <body>
-        <div id="container">
-            <textarea id="area" rows="10" cols="50"></textarea>
-        </div>
-    </body>
-</html>
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<table>
+	<tr><td>Note:</td></tr>
+	<tr>
+		<td colspan="3">
+			<textarea id="inputTextToSave" cols="80" rows="25"></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td>Filename to Save As:</td>
+		<td><input id="inputFileNameToSaveAs"></input></td>
+		<td><button onclick="saveTextAsFile()">Save</button></td>
+	</tr>
+</table>
+
+<script type="text/javascript">
+
+function saveTextAsFile()
+{
+	var textToSave = document.getElementById("inputTextToSave").value;
+	var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
+	var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+	var fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value;
+
+	var downloadLink = document.createElement("a");
+	downloadLink.download = fileNameToSaveAs;
+	downloadLink.innerHTML = "Download File";
+	downloadLink.href = textToSaveAsURL;
+	downloadLink.onclick = destroyClickedElement;
+	downloadLink.style.display = "none";
+	document.body.appendChild(downloadLink);
+
+	downloadLink.click();
+}
+
+function destroyClickedElement(event)
+{
+	document.body.removeChild(event.target);
+}
+</script>
+
+{% endblock %}

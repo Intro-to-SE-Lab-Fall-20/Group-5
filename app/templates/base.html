@@ -4,6 +4,8 @@
 {{super()}}
   <link rel="stylesheet" href="{{url_for('.static', filename='my_style.css')}}">
   <script src="https://cdn.tiny.cloud/1/pjb5c1nk0do71sqckykoreyq6l468e239ovnac6ru707gcl1/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <body background="{{ url_for('static', filename='PotatoMail_Background.jpg') }}">
+
 {% endblock %}
 
 {% block title %}
@@ -20,7 +22,7 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="{{url_for('login')}}">Potato Mail </a>
+                <a class="navbar-brand" href="{{url_for('login')}}">Potato </a>
             </div>
 
             {% if current_user.is_authenticated %}
@@ -51,7 +53,10 @@
         {% if current_user.is_authenticated %}
         <div id="sidebar-wrapper">
           <ul class="sidebar-nav">
-            {% block sidenav %}{% endblock %}
+            <div style="background-color:#645394;">
+            {% block sidenav %}
+            {% endblock %}
+            </div>
           </ul>
         </div>
         {% endif %} 
@@ -66,8 +71,12 @@
             {% endwith %}
 
             {# application content needs to be provided in the app_content block #}
-            {% block app_content %}{% endblock %}
-            
+            <div style="background-color:rgba(200, 162, 200, 0.75); color:black; display: block;
+            margin-left: auto;
+            margin-right: auto;">
+            {% block app_content %}
+            {% endblock %}
+            </div>
         
         </div>
     </div>

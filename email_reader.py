@@ -90,10 +90,10 @@ def receive_emails(server, inbox, N, username, password):
 					# if the email message is multipart
 					if msg.is_multipart():
 						# iterate over email parts
-						
+						body = []
 						for part in msg.walk():
 							# extract content type of email
-							
+
 							content_type = part.get_content_type()
 							content_disposition = str(part.get("Content-Disposition"))
 							
@@ -111,16 +111,17 @@ def receive_emails(server, inbox, N, username, password):
 										# make a folder for this email (named after the subject)
 										os.mkdir(sanatized_subject)
 
-									filepath = os.path.join(sanatized_subject, filename.rstrip().replace(" ", "_"))
+									filepath = os.path.join(sanatized_subject, filename)
 									# download attachment and save it
 									open(filepath, "wb").write(part.get_payload(decode=True))
 							else:
 								try:
 									# get the email body
-									body = part.get_payload(decode=True).decode()
+									temp = part.get_payload(decode=True).decode()
+									if temp != "":
+										body.append( temp)
 								except:
 									pass
-
 					else:
 						# extract content type of email
 						content_type = msg.get_content_type()
@@ -143,14 +144,13 @@ def receive_emails(server, inbox, N, username, password):
 						"sender": from_,
 						"receiver": to_,
 						"subject": subject,
-						"body": body,
+						"body": body[-1],
 						"id": i, 
 						"attachment": attachment
 					})
 		imap.close()
 		imap.logout()
 		return emails
-	except Exception as e:
+	except: 
 		print("Authenication Error")
-		print(e)
 		return []

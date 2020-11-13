@@ -64,7 +64,7 @@ def _get_attach_msg(path_1):
 		message.set_payload(fp.read())
 		fp.close()
 		encoders.encode_base64(message)
-	message.add_header('Content-Disposition', 'attachment', filename=os.path.split('/')[-1])
+	message.add_header('Content-Disposition', 'attachment', filename=filename)
 	return message
 
 def copyfileobj(fsrc, fdst, length=16*1024):
@@ -81,7 +81,7 @@ def _make_mime(email):
 	message['Subject'] = email.subject
 	message['From'] = email.sender
 	message['To'] = email.reciever
-	part1 = MIMEText(html2text.html2text(email.message), "plain")
+	part1 = MIMEText(html2text.html2text(email.message), "text")
 	part2 = MIMEText(email.message, "html")
 
 	message.attach(part1)
